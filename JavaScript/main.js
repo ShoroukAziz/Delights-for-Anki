@@ -68,9 +68,8 @@ Note = class {
     this.html_translation = utils.HTMLClass('translationText');
     this.translation = utils.textClass('translationText');
     this.translationWords = this.translation.split(',');
-    this.isVerb = false;
-    this.frenchExample = utils.HTMLId('frenchExamble');
-    this.englishExample = utils.HTMLId('englishExample');
+    this.example = utils.HTMLId('example');
+    this.exampelsTranslation = utils.HTMLId('exampelsTranslation');
     try {
       this.type = utils.textClass('type');
       if (this.type == "") this.type = "na";
@@ -96,19 +95,6 @@ Note = class {
     } catch (error) {
       this.ipa = null;
     }
-
-    try {
-      this.fem = utils.textClass('feminin');
-      if (this.fem == "") this.fem = null;
-    } catch (error) {
-      this.fem = null;
-    }
-    try {
-      this.plural = utils.textClass('plural');
-      if (this.plural == "") this.plural = null;
-    } catch (error) {
-      this.plural = null;
-    }
     try {
       this.ivl = utils.HTMLId('ivl');
       if (this.ivl == "") this.ivl = null;
@@ -126,19 +112,10 @@ Note = class {
 
   }
 
-  isAVerb(){
-    var _this = this;
-    if (_this.type.includes('verb') && !note.type.includes('adverb')) {
-      _this.isVerb = true;
-  }
-  }
-
 
 };
 
 note = new Note();
-// note.getTranslationWords();
-note.isAVerb();
 
 
 NoteStyleManipulator = class {
@@ -149,29 +126,18 @@ NoteStyleManipulator = class {
   /**
    * Highlits the word in the French example and the translation in the E nglish example
   */
-  markFrenchWordInTheExample(example, englishEx) {
-    document.querySelector('#frenchExamble').innerHTML = example.replaceAll(note.word,`<span class='example__higlighted-word'> ${ note.word }</span>` );
-    document.querySelector('#englishExample').innerHTML = englishEx;
+  markWordInTheExample(example, translatedEx) {
+    document.querySelector('#example').innerHTML = example.replaceAll(note.word,`<span class='example__higlighted-word'> ${ note.word }</span>` );
+    document.querySelector('#exampelsTranslation').innerHTML = translatedEx;
 
     let parts = this.note.translationWords;
     parts.forEach((part, i) => {
       part = part.trim();
-        if (englishEx.toLowerCase().includes(part.toLowerCase())) {
-          document.querySelector('#englishExample').innerHTML = englishEx.replaceAll(part, `<span class='example__higlighted-word'>${ part }</span>`);
+        if (translatedEx.toLowerCase().includes(part.toLowerCase())) {
+          document.querySelector('#exampelsTranslation').innerHTML = translatedEx.replaceAll(part, `<span class='example__higlighted-word'>${ part }</span>`);
         }
     });
-    if (note.isVerb) {
-      parts.forEach((part, i) => {
-        if (part.includes('to ') || part.includes('for ')) {
-          part = part.replace('to ', '').trim();
-          part = part.replace('for ', '').trim();
-            if (englishEx.includes(part)) {
-              document.querySelector('#englishExample').innerHTML = englishEx.replaceAll(part, "<span class='example__higlighted-word'>" + part + "</span>");
-            }
-        }
-      });
 
-    }
   }
 
   /**
@@ -188,13 +154,6 @@ NoteStyleManipulator = class {
     });
 
   }
-
-  removeHTMLfromWordAndTranslationFields() {
-    document.querySelector('.translationText').innerHTML = this.translation;
-    document.querySelector('#word').innerHTML = this.word;
-  }
-
-
   prebBackGround() {
     /*Change the card's background color according to its type*/
 
@@ -209,12 +168,14 @@ NoteStyleManipulator = class {
     } else if (note.type.trim().includes('feminine')) {
       changeBackGroundColor("feminine__background", "feminine__image");
     } else if (note.type.trim().includes('masculine')) {
-      changeBackGroundColor("masculine__background", "masculine__image");
+      changeBackGroundColor("masculine__background", "masculine__image");}
+    else if (note.type.trim().includes('noun')) {
+      changeBackGroundColor("noun__background", "noun__image");
     } else if (note.type.trim().includes('adjective')) {
       changeBackGroundColor("adjective__background", "adjective__image");
     } else if (note.type.trim().includes('adverb')) {
       changeBackGroundColor("adverb__background", "adverb__image");
-    } else if (note.isVerb) {
+    } else if (note.type.trim().includes('verb')) {
       changeBackGroundColor("verb__background", "verb__image");  
     } else if (note.type.trim().includes('phrase')) {
       changeBackGroundColor("phrase__background", "phrase__image");
@@ -294,684 +255,22 @@ NoteStyleManipulator = class {
 
   }
 
-  /**
-   *  If it's a phrase card add Youglish widget to it
-   */
-  prepPhrases() {
-    if (note.type.includes('phrase')) {
-      document.querySelector('#phrase').innerHTML = `
-    <a id="yg-widget-0" class="youglish-widget" data-query="${note.word.replaceAll(" ","%20")}"data-lang="french" data-components="80"   data-rest-mode="1"  rel="nofollow" </a>
-    `;
-      if (document.querySelector('.typed')) {
-        document.querySelector('.typed').style.display = 'none';
-
-      }
-
-
-    }
-
-
-  }
 
 
 };
 
 
 styleManipulator = new NoteStyleManipulator(note);
-styleManipulator.markFrenchWordInTheExample(note.frenchExample, note.englishExample);
+styleManipulator.markWordInTheExample(note.example, note.exampelsTranslation);
 styleManipulator.removeExtraNewLineTagInSoundFields();
-styleManipulator.removeHTMLfromWordAndTranslationFields();
 styleManipulator.prebBackGround();
 styleManipulator.splitTranslation();
 styleManipulator.changeReplaybutton();
-styleManipulator.prepPhrases();
 
 
 
 
 /********************************/
-
-
-
-
-ChangeDetector = class {
-  constructor(note) {
-    this.note = note;
-    this.word = note.word;
-    this.translation = note.translationWords[0];
-
-    this.pairs = [
-      ['alt', 'alte'],
-      ['arian', 'aire'],
-      ['gen', 'gène'],
-      ['graph', 'graphe'],
-      ['ic', 'ique'],
-      ['isk', 'isque'],
-      ['ism', 'isme'],
-      ['ist', 'iste'],
-      ['meter', 'mètre'],
-      ['mony', 'monie'],
-      ['oid', 'oide'],
-      ['or', 'eur'],
-      ['ot', 'ote'],
-      ['sis', 'se'],
-      ['ter', 'tre'],
-      ['ty', 'té'],
-      ['y', 'ie'],
-      ['acious', 'ace'],
-      ['an', 'ain'],
-      ['ar', 'aire'],
-      ['arious', 'aire'],
-      ['ary', 'aire'],
-      ['ferrous', 'fère'],
-      ['ical', 'ique'],
-      ['id', 'ide'],
-      ['ine', 'in'],
-      ['ite', 'it'],
-      ['ive', 'if'],
-      ['nal', 'ne'],
-      ['ocious', 'oce'],
-      ['ous', 'eux'],
-      ['und', 'ond'],
-      ['ure', 'ur'],
-      ['ent', 'em'],
-      ['ect', 'ait'],
-      ['act', 'aite'],
-      ['ate', 'ative'],
-      ['k', 'que'],
-      ['er', 're'],
-      ['ous', 'e'],
-      ['ious', 'aire'],
-      ['ous', 'ique'],
-      ['ed', 'é']
-    ];
-
-    this.advPairs = [
-      ['y', 'ement'],
-      ['ally', 'ellement'],
-      ['ly', 'ement'],
-      ['ly', 'ément'],
-      ['ly', 'ment']
-    ];
-
-    this.femPairs = [
-      ['ère', 'er'],
-      ['se', 's'],
-      ['ve', 'f'],
-      ['euse', 'eux'],
-      ['che', 'c'],
-      ['euse', 'eur'],  ['teuse', 'teur'],
-      ['eresse', 'eur'],
-      ['elle', 'eau'],
-      ['olle', 'ou'],
-      ['aîtresse', 'aître']
-    ];
-
-    this.plPairs = [
-      ['aux', 'al'],
-      ['oux', 'ou'],
-      ['aux', 'ail'],
-      ['aux', 'au'],
-      ['eaux', 'eau'],
-      ['s', 's'],
-      ['x', 'x'],
-      ['z', 'z']
-    ];
-
-    this.verb_pairs = [
-      ['ate', 'er'],
-      ['fy', 'fier'],
-      ['ise', 'iser'],
-      ['e', 'er']
-    ];
-
-  }
-
-  /************************************************************/
-  /* --------------------Siblings detctors--- -----------------*/
-  /*************************************************************/
-
-
-  isSibling(word, translation, testingPairs) {
-
-    let _this = this;
-    var result = -1;
-
-    testingPairs.forEach(function (element) {
-      let wordIndex = -element[1].length;
-      let translationIndex = -element[0].length;
-      if (word.endsWith(element[1]) && translation.endsWith(element[0])) {
-
-        if (translation.slice(0, translationIndex) == word.slice(0, wordIndex)) {
-          result = element;
-        }
-      }
-    });
-    if (result != -1) return [result[1], result[0]];
-  }
-
-  isDoupleSibling(word, translation) {
-    let _this = this;
-
-    var result = -1;
-    this.advPairs.forEach(function (element) {
-      let index = -element[0].length;
-      if (word.endsWith(element[1]) && translation.endsWith(element[0])) {
-        let wordIndex = -element[1].length;
-        let translationIndex = -element[0].length;
-        let adjSibilings = _this.isSibling(word.slice(0, wordIndex), translation.slice(0, translationIndex), _this.pairs);
-
-        if (adjSibilings) {
-
-          result = [element[1], element[0], adjSibilings[0], adjSibilings[1]];
-        }
-      }
-    });
-    if (result != -1) {
-      return result;
-    }
-  }
-
-  isChapeau(word, translation) {
-    word = this.word;
-    translation = this.translation;
-    var result = -1;
-    var couples = [
-      ['ê', 'es'],
-      ['û', 'us'],
-      ['î', 'is'],
-      ['ô', 'os'],
-      ['â', 'as']
-    ];
-
-    couples.forEach(function (element) {
-      if (word.includes(element[0]) && translation.includes(element[1])) {
-        let new_word = word.replace(element[0], '');
-        let new_trans = translation.replace(element[1], '');
-        if (new_word == new_trans) {
-          result = element;
-        }
-      }
-    });
-    if (result != -1) {
-      return result;
-    }
-  }
-
-  /**************************************************************/
-  /* -----------------slight change detctors--------------------*/
-  /**************************************************************/
-
-
-  hasAFlippedLetter(word, translation) {
-    if (word.length == translation.length) {
-      var loc, c = -1;
-      for (var i = 0; i < word.length; i++) {
-        if (word[i] != translation[i]) {
-          c++;
-          if (c == 0) loc = i;
-        }
-        if (c > 0) break;
-      }
-      if (c == 0) return loc;
-    }
-  }
-
-  hasALongertTranslation(word, translation) {
-    word = this.word;
-    translation = this.translation;
-    if ((translation.length == word.length + 1)) {
-      for (var i = 0; i < translation.length; i++) {
-        var newTrans = translation.removeAt(i);
-        if (newTrans == word) return i;
-      }
-    }
-  }
-
-  hasAShorterTranslation(word, translation) {
-    word = this.word;
-    translation = this.translation;
-    if ((word.length == translation.length + 1)) {
-      for (var i = 0; i < word.length; i++) {
-        var newWord = word.removeAt(i);
-        if (newWord == translation) return i;
-      }
-    }
-  }
-
-  
-  /**************************************************************/
-  /* -----------------complicated change detctors---------------*/
-  /**************************************************************/
-
-  isSiblingWithExtraLetter(word, translation, testingPairs) {
-
-    let _this = this;
-    word = this.word;
-    translation = this.translation;
-
-    for (var i = 0; i < translation.length; i++) {
-      var newTrans = translation.removeAt(i);
-      if (_this.isSibling(word, newTrans, testingPairs)) {
-        return [i, _this.isSibling(word, newTrans, testingPairs)[0], _this.isSibling(word, newTrans, testingPairs)[1], 2];
-
-      }
-    }
-
-    for (var j = 0; j < word.length; j++) {
-      var newWord = word.removeAt(j);
-      if (_this.isSibling(newWord, translation, testingPairs)) {
-        return [j, _this.isSibling(newWord, translation, testingPairs)[0], _this.isSibling(newWord, translation, testingPairs)[1], 1];
-
-      }
-    }
-  }
-
-
-
-  isSiblingWithFlippedLetter(word, translation, testingPairs) {
-    let _this = this;
-    var result = -1;
-    var result2;
-    word = this.word;
-    translation = this.translation;
-    testingPairs.forEach(function (element) {
-        let index = -element[0].length;
-        if (translation.endsWith(element[0]) && word.endsWith(element[1])) {
-          let newA = word.slice(0, -element[1].length);
-          let newB = translation.slice(0, -element[0].length);
-
-          if (_this.hasAFlippedLetter(newA, newB)) {
-            result2 = _this.hasAFlippedLetter(newA, newB);
-            result = element;
-          }
-        }
-      }
-
-    );
-    if (result != -1) {
-      return [result[1], result[0], result2];
-    }
-  }
-
-
-  hasDoubleSiblingExtraLetter(word, translation) {
-    let _this = this;
-    word = this.word;
-    translation = this.translation;
-
-    for (var i = 0; i < translation.length; i++) {
-      var newTrans = translation.removeAt(i);
-      if (changeDetector.isDoupleSibling(word, newTrans)) {
-        return [i, _this.isDoupleSibling(word, newTrans)[0], _this.isDoupleSibling(word, newTrans)[1], _this.isDoupleSibling(word, newTrans)[2], _this.isDoupleSibling(note.word, newTrans)[3], 2];
-      }
-    }
-
-    for (var j = 0; j < word.length; j++) {
-      var newWord = word.removeAt(j);
-      if (changeDetector.isDoupleSibling(newWord, translation)) {
-        return [j, _this.isDoupleSibling(newWord, translation)[0], _this.isDoupleSibling(newWord, translation)[1], _this.isDoupleSibling(newWord, translation)[2], _this.isDoupleSibling(newWord, translation)[3], 1];
-      }
-    }
-
-  }
-
-
-  hasDoubleSiblingflippedLetter(word, translation) {
-    //TODO
-  }
-
-};
-changeDetector = new ChangeDetector(note);
-
-
-
-
-Marker = class {
-
-  constructor(note, changeDetector) {
-    this.note = note;
-    this.changeDetector = this.changeDetector;
-  }
-
-  /*part1: the translation ending
-  * part2: the french word ending
-  * i the different letter index
-  * x undifines : filpped letter change both words
-  * x1 the extra letter in the word
-  * x2 the extra letter in the translation */
-
-  markSiplingsEnding(theWord, theTranslation, part1, part2, color1) {
-
-    var styleStart1 = `<span style="color:${color1}"><u>`;
-    var styleEnd = '</u></span>';
-
-    var theWordP1 = theWord.slice(0, -part1.length);
-    var highlitedWord = theWordP1 + styleStart1 + part1 + styleEnd;
-
-
-    var theTransP1 = theTranslation.slice(0, -part2.length);
-    var highlitedTrans = theTransP1 + styleStart1 + part2 + styleEnd;
-
-
-    return [highlitedWord, highlitedTrans];
-  }
-
-  markChapeau(theWord, theTranslation, part1, part2, color1) {
-    //TODO
-  }
-
-
-  highlightSpelling(nOfChanges, theWord, theTranslation, part1, part2, color1, color2, index, changePlace, otherTranslations, p3, p4) {
-    var _this = this;
-    let highletedWord;
-    let highlightedTranslation;
-
-    var styleStart1 =  `<span style="color:${color1}"><u>`;
-    var styleStart2 =  `<span style="color:${color2}"><u>`;
-    var styleEnd = '</u></span>';
-    if (part1) var p1Index = -part1.length;
-    if (part2) var p2Index = -part2.length;
-
-    if (nOfChanges == 1 && index == null) {
-      // if thye're siblings or chapeau
-
-      highletedWord = _this.markSiplingsEnding(theWord, theTranslation, part1, part2, color1)[0];
-      highlightedTranslation = _this.markSiplingsEnding(theWord, theTranslation, part1, part2, color1)[1];
-      if (color1 == 'deeppink') {
-        document.querySelector("#ribbon").className = "ribbon ribbon--pink";
-      } else {
-        document.querySelector("#ribbon").className = "ribbon ribbon--blue";
-      }
-
-    } else if (nOfChanges == 1 && index != null) {
-      // if slight change (é instead of e or extra letter etc..)
-      document.querySelector("#ribbon").className = "ribbon ribbon--pink";
-      if (changePlace == 0) {
-        //if the change in both word and translation
-        highletedWord = theWord.replaceAt(index, styleStart1 + theWord[index] + styleEnd);
-        highlightedTranslation = theTranslation.replace(theTranslation[index], styleStart1 + theTranslation[index] + styleEnd);
-      } else if (changePlace == 1) {
-        highletedWord = theWord.replaceAt(index, styleStart1 + theWord[index] + styleEnd);
-        highlightedTranslation = theTranslation;
-
-      } else if (changePlace == 2) {
-        highletedWord = theWord;
-        highlightedTranslation = theTranslation.replaceAt(index, styleStart1 + theTranslation[index] + styleEnd);
-      }
-    } else if (nOfChanges == 2 && index != null && p3 == null) {
-      document.querySelector("#ribbon").className = "ribbon ribbon--blue";
-      //if the letter is changed from the word to the translation (flipped letter)
-      if (changePlace == 0) {
-        highletedWord = theWord.replaceAt(index, styleStart2 + theWord[index] + styleEnd);
-        highlightedTranslation = theTranslation.replaceAt(index, styleStart2 + theTranslation[index] + styleEnd);
-
-        highletedWord = _this.markSiplingsEnding(highletedWord, highlightedTranslation, part1, part2, color1)[0];
-        highlightedTranslation = _this.markSiplingsEnding(highletedWord, highlightedTranslation, part1, part2, color1)[1];
-
-      } else if (changePlace == 1) {
-        if (index == (theWord.length) - 1) {
-          highletedWord = _this.markSiplingsEnding(theWord.slice(0, -1), theTranslation, part1, part2, color1)[0] + styleStart2 + theWord[index] + styleEnd;
-          highlightedTranslation = _this.markSiplingsEnding(theWord.slice(0, -1), theTranslation, part1, part2, color1)[1];
-
-        } else {
-          highletedWord = theWord.replaceAt(index, styleStart2 + theWord[index] + styleEnd);
-          highlightedTranslation = _this.markSiplingsEnding(highletedWord, theTranslation, part1, part2, color1)[1];
-          highletedWord = _this.markSiplingsEnding(highletedWord, highlightedTranslation, part1, part2, color1)[0];
-        }
-
-      } else {
-
-        if (index == (theTranslation.length) - 1) {
-          highletedWord = _this.markSiplingsEnding(theWord, theTranslation.slice(0, -1), part1, part2, color1)[0];
-          highlightedTranslation = _this.markSiplingsEnding(theWord, theTranslation.slice(0, -1), part1, part2, color1)[1] + styleStart2 + theTranslation[index] + styleEnd;
-
-        } else {
-          highlightedTranslation = theTranslation.replaceAt(index, styleStart2 + theTranslation[index] + styleEnd);
-          highletedWord = _this.markSiplingsEnding(theWord, highlightedTranslation, part1, part2, color1)[0];
-          highlightedTranslation = _this.markSiplingsEnding(highletedWord, highlightedTranslation, part1, part2, color1)[1];
-
-        }
-
-      }
-
-    } else if (nOfChanges == 2 && index == null && p3 != null) {
-      // if double sibling
-
-      highletedWord = _this.markSiplingsEnding(theWord, theTranslation, part1, part2, '#07607d')[0];
-      w1 = theWord.slice(0, -part1.length);
-      w2 = w1.slice(0, -p3.length);
-      highletedWord =` ${w2}<span style='color:#07607d'><u> ${p3} </u></span> ${styleEnd} ${styleStart1} ${part1} ${styleEnd}`;
-
-
-      highlightedTranslation = _this.markSiplingsEnding(theWord, theTranslation, part1, part2, '#07607d')[1];
-      t1 = theTranslation.slice(0, -part2.length);
-      t2 = t1.slice(0, -p4.length);
-      highlightedTranslation =`${t2} <span style='color:#07607d'><u> ${p4} </u></span> ${styleEnd} ${styleStart1} ${part2} ${styleEnd}`;
-
-
-    } else if (nOfChanges == 2 && index != null && p3 != null) {
-      if (changePlace == 0) {
-        highletedWord = theWord.replaceAt(index, styleStart2 + theWord[index] + styleEnd);
-        highletedWord = highletedWord.replace(p3, `<span style='color:#07607d'><u> ${p3}</u></span> ${styleEnd}`);
-        highletedWord = highletedWord.replace(part1, styleStart1 + part1 + styleEnd);
-        highlightedTranslation = theTranslation.replaceAt(index, styleStart2 + theTranslation[index] + styleEnd);
-        highlightedTranslation = highlightedTranslation.replace(part2, styleStart1 + part2 + styleEnd);
-        highlightedTranslation = highlightedTranslation.replace(p4, "<span style='color:#07607d'><u>" + p4 + "</u></span>" + styleEnd);
-
-      } else if (changePlace == 1) {
-        //if the change is in the word
-        highletedWord = theWord.replaceAt(index, styleStart2 + theWord[index] + styleEnd);
-        highletedWord = highletedWord.replace(p3, "<span style='color:#07607d'><u>" + p3 + "</u></span>" + styleEnd);
-        highletedWord = highletedWord.replace(part1, styleStart1 + part1 + styleEnd);
-        highlightedTranslation = theTranslation.replace(part2, styleStart1 + part2 + styleEnd);
-        highlightedTranslation = highlightedTranslation.replace(p4, "<span style='color:#07607d'><u>" + p4 + "</u></span>" + styleEnd);
-
-
-      } else {
-        highletedWord = theWord.replace(p3, "<span style='color:#07607d'><u>" + p3 + "</u></span>" + styleEnd);
-        highletedWord = highletedWord.replace(part1, styleStart1 + part1 + styleEnd);
-
-        highlightedTranslation = theTranslation.replaceAt(index, styleStart2 + theTranslation[index] + styleEnd);
-        highlightedTranslation = highlightedTranslation.replace(part2, styleStart1 + part2 + styleEnd);
-        highlightedTranslation = highlightedTranslation.replace(p4, "<span style='color:#07607d'><u>" + p4 + "</u></span>" + styleEnd);
-      }
-    }
-
-    if (document.querySelector('#word')) {
-      document.querySelector('#word').innerHTML = highletedWord;
-    } else if (document.querySelector('.masculine')) {
-      document.querySelector('.masculine').innerHTML = highletedWord;
-    } else if (document.querySelector('.word')) {
-      // document.querySelector('.word').innerHTML =highletedWord
-    }
-
-    document.querySelector('.translationText').innerHTML = highlightedTranslation;
-
-    if (highlightedTranslation == translation && highletedWord == note.word) {
-      return false;
-    }
-  }
-
-  mark() {
-
-    let otherTranslations = note.translationWords.slice(1, );
-
-    if (note.translationWords[0] == note.word) {
-      document.querySelector("#ribbon").className = "ribbon ribbon--green";
-    } else {
-
-      let siblings = changeDetector.isSibling(note.word, note.translationWords[0], changeDetector.pairs);
-      let adverbSibling = changeDetector.isSibling(note.word, note.translationWords[0], changeDetector.advPairs);
-      let doupleSibling = changeDetector.isDoupleSibling(note.word, note.translationWords[0]);
-      let chapeau = changeDetector.isChapeau(note.word, note.translationWords[0]);
-
-      let flipped = changeDetector.hasAFlippedLetter(note.word, note.translationWords[0]);
-      let longertTranslation = changeDetector.hasALongertTranslation(note.word, note.translationWords[0]);
-      let shorterTranslation = changeDetector.hasAShorterTranslation(note.word, note.translationWords[0]);
-
-      let siblingWithExtraLetter = changeDetector.isSiblingWithExtraLetter(note.word, note.translationWords[0], changeDetector.pairs);
-      let siblingWithFlippedLetter = changeDetector.isSiblingWithFlippedLetter(note.word, note.translationWords[0], changeDetector.pairs);
-
-
-      let advSiblingWithExtraLetter = changeDetector.isSiblingWithExtraLetter(note.word, note.translationWords[0], changeDetector.advPairs);
-      let advsiblingWithFlippedLetter = changeDetector.isSiblingWithFlippedLetter(note.word, note.translationWords[0], changeDetector.advPairs);
-
-      let doubleSiblingExtraLetter = changeDetector.hasDoubleSiblingExtraLetter(note.word, note.translationWords[0]);
-      //let doubleSiblingflippedLetter = changeDetector.hasDoubleSiblingflippedLetter (note.word , note.translationWords[0]);
-
-
-      if (siblings)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], siblings[0], siblings[1], '#0099cc', null, null, null, otherTranslations);
-      else if (adverbSibling)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], adverbSibling[0], adverbSibling[1], '#0099cc', null, null, null, otherTranslations);
-      else if (doupleSibling)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], doupleSibling[0], doupleSibling[1], '#0099cc', '#07607d', null, null, otherTranslations, doupleSibling[2], doupleSibling[3]);
-      else if (chapeau)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], chapeau[0], chapeau[1], 'deeppink', null, null, null, otherTranslations);
-      else if (flipped >= 0)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], null, null, 'deeppink', null, flipped, 0, otherTranslations);
-      else if (longertTranslation >= 0)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], null, null, 'deeppink', null, longertTranslation, 2, otherTranslations);
-      else if (shorterTranslation >= 0)
-        return marker.highlightSpelling(1, note.word, note.translationWords[0], null, null, 'deeppink', null, shorterTranslation, 1, otherTranslations);
-      else if (siblingWithExtraLetter)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], siblingWithExtraLetter[1], siblingWithExtraLetter[2], '#0099cc', 'deeppink', siblingWithExtraLetter[0], siblingWithExtraLetter[3], otherTranslations);
-      else if (advSiblingWithExtraLetter)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], advSiblingWithExtraLetter[1], advSiblingWithExtraLetter[2], '#0099cc', 'deeppink', advSiblingWithExtraLetter[0], advSiblingWithExtraLetter[3], otherTranslations);
-      else if (siblingWithFlippedLetter)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], siblingWithFlippedLetter[0], siblingWithFlippedLetter[1], '#0099cc', 'deeppink', siblingWithFlippedLetter[2], 0, otherTranslations);
-      else if (advsiblingWithFlippedLetter)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], advsiblingWithFlippedLetter[0], advsiblingWithFlippedLetter[1], '#0099cc', 'deeppink', advsiblingWithFlippedLetter[2], 0, otherTranslations);
-      else if (doubleSiblingExtraLetter)
-        return marker.highlightSpelling(2, note.word, note.translationWords[0], doubleSiblingExtraLetter[1], doubleSiblingExtraLetter[2], '#0099cc', 'deeppink', doubleSiblingExtraLetter[0], doubleSiblingExtraLetter[5], otherTranslations, doubleSiblingExtraLetter[3], doubleSiblingExtraLetter[4]);
-      else if (note.isVerb) {
-        return true;
-      } else {
-        return false;
-      }
-      // else if (doubleSiblingflippedLetter)
-      //   marker.highlightSpelling(2,word ,note.translationWords[0] ,doubleSiblingflippedLetter[1],doubleSiblingflippedLetter[2],'#0099cc','deeppink',doubleSiblingflippedLetter[0],0,otherTranslations,doubleSiblingflippedLetter[3],doubleSiblingflippedLetter[4]);
-    }
-
-  }
-
-  markGender() {
-
-    let siblings = changeDetector.isSibling(note.word, note.fem, changeDetector.femPairs);
-    if (siblings) {
-
-      document.querySelector("#ribbon").className = "";
-      document.querySelector('.masculine').innerHTML = marker.markSiplingsEnding(note.word, fem, siblings[0], siblings[1], '#0099cc')[0];
-      document.querySelector('.feminin').innerHTML = marker.markSiplingsEnding(note.word, fem, siblings[0], siblings[1], '#0099cc')[1];
-    } else if (note.word + 'e' == note.fem) {
-      document.querySelector("#ribbon").className = "";
-      document.querySelector('.feminin').innerHTML = note.fem.slice(0, -1) + "<span style='color:#0099cc'><u>e</u></span>";
-    } else if (note.word + note.word[note.word.length - 1] + 'e' == note.fem) {
-      document.querySelector("#ribbon").className = "";
-      document.querySelector('.feminin').innerHTML = note.fem.slice(0, -2) + "<span style='color:#0099cc'><u>" + note.word[note.word.length - 1] + "e</u></span>";
-    } else if (note.word.endsWith('e') && note.word == note.fem) {
-      document.querySelector("#ribbon").className = "";
-      document.querySelector('.masculine').innerHTML = note.word.slice(0, -1) + "<span style='color:#0099cc'><u>e</u></span>";
-      document.querySelector('.feminin').innerHTML = note.fem.slice(0, -1) + "<span style='color:#0099cc'><u>e</u></span>";
-    }
-
-  }
-
-  markCustome() {
-    document.querySelector('.translationText').innerHTML = note.html_translation;
-    if (document.querySelector('#word')) {
-      document.querySelector('#word').innerHTML = note.html_word;
-    }
-
-    //document.querySelector('.word').innerHTML = note.html_word
-    else if (document.querySelector('.masculine')) {
-      document.querySelector('.masculine').innerHTML = note.html_word;
-    } else if (document.querySelector('.word')) {
-      document.querySelector('.word').innerHTML = note.html_word;
-    }
-    styleManipulator.splitTranslation();
-  }
-
-
-  displaypPlural() {
-    let siblings = changeDetector.isSibling(note.word, note.plural, changeDetector.plPairs);
-    let word2;
-    if (siblings) {
-      pluralText = marker.markSiplingsEnding(note.word, note.plural, siblings[0], siblings[1], '#0099cc')[1];
-      word2 = marker.markSiplingsEnding(note.word, note.plural, siblings[0], siblings[1], '#0099cc')[0];
-    } else if (note.word + 's' == note.plural) {
-
-      pluralText = note.plural.slice(0, -1) + "<span style='color:#0099cc'><u>s</u></span>";
-      word2 = note.word;
-    } else {
-      pluralText = note.plural;
-      word2 = note.word;
-    }
-
-    if (note.type.includes('noun') && !(note.type.includes('fem') && note.type.includes('mas'))) {
-
-      var pluralText = word2 + "&nbsp <img class='plural-arrow-icon' src='_french-delights/assets/icons/arrow.png'/>&nbsp" + pluralText;
-      document.getElementsByClassName("word")[0].innerHTML = pluralText;
-    } else {
-      document.querySelector('#plural').innerHTML = pluralText;
-      document.querySelector('#plural').style.display = ('block');
-      document.getElementsByClassName("masculine")[0].innerHTML = word2;
-    }
-
-  }
-
-
-  markVerbEnding() {
-    let new_html;
-    let org_html = document.querySelector("#word").innerText;
-    let group = document.querySelector("#group").innerHTML;
-
-    var lastChar = org_html[org_html.length - 1];
-    var start = org_html.slice(0, -2);
-    lastChar = org_html.slice(-2);
-    if (group.trim() == "one") {
-
-      new_html = start + "<span class='verb-first-group-ending'>" + lastChar + "</span>";
-      document.querySelector("#word").innerHTML = new_html;
-    } else if (group.trim() == "two") {
-      new_html = start + "<span class='verb-second-group-ending'>" + lastChar + "</span>";
-      document.querySelector("#word").innerHTML = new_html;
-    } else if (group.trim() == "three") {
-      new_html = start + "<span class='verb-third-group-ending'>" + lastChar + "</span>";
-      document.querySelector("#word").innerHTML = new_html;
-    }
-  }
-
-  unMark() {
-    document.querySelector("#ribbon").className = "";
-    document.querySelector('.translationText').innerHTML = note.translation;
-
-    if (document.querySelector('.word') && (note.type.includes('noun') && !(note.fem) && !(note.type.includes('fem') && note.type.includes('mas')))) {
-      document.querySelector('.word').innerHTML = note.word;
-    }
-    if (document.querySelector('#word'))
-      document.querySelector('#word').innerHTML = note.word;
-
-    if (document.querySelector('.masculine')) {
-      document.querySelector('.masculine').innerHTML = note.word;
-    }
-
-    if (note.fem) {
-      document.querySelector('.feminin').innerHTML = note.fem;
-    }
-
-    if (document.querySelector('.plural')) {
-      document.querySelector('.plural').style.display = 'none';
-    }
-    document.querySelector('#ribbon').className = "";
-    styleManipulator.splitTranslation();
-  }
-
-};
-marker = new Marker(note, changeDetector);
-
-
 
 
 NoteExtras = class {
@@ -980,28 +279,6 @@ NoteExtras = class {
   }
 
 
-
-  highlightWord(id) {
-    if (id == 'highlightNone') {
-      marker.unMark();
-    } else if (id == 'highlightRoots') {
-      marker.unMark();
-      if (note.isVerb) {
-        marker.markVerbEnding();
-      } else {
-        marker.mark();
-      }
-    } else if (id == 'highlightCustom') {
-      marker.unMark();
-      marker.markCustome();
-    } else if (id == 'highlightGender') {
-      marker.unMark();
-      marker.markGender();
-    } else if (id == 'highlightPlural') {
-      marker.unMark();
-      marker.displaypPlural();
-    }
-  }
 
 
   dispalyOption(id) {
@@ -1066,13 +343,13 @@ NoteExtras = class {
         document.querySelector("#previousIcon").style.display = "none";
         document.querySelector("#nxtIcon").style.display = "none";
         document.querySelector("#noOfEx").style.display = "none";
-        document.querySelector("#frenchExamble").style.display = "block";
+        document.querySelector("#example").style.display = "block";
       } else {
         checkEX.checked = true;
         document.querySelector("#previousIcon").style.display = "inline-block";
         document.querySelector("#nxtIcon").style.display = "inline-block";
         document.querySelector("#noOfEx").style.display = "block";
-        document.querySelector("#frenchExamble").style.display = "inline-block";
+        document.querySelector("#example").style.display = "inline-block";
 
       }
 
@@ -1081,7 +358,7 @@ NoteExtras = class {
       document.querySelector("#previousIcon").style.display = "none";
       document.querySelector("#nxtIcon").style.display = "none";
       document.querySelector("#noOfEx").style.display = "none";
-      document.querySelector("#frenchExamble").style.display = "block";
+      document.querySelector("#example").style.display = "block";
     }
 
   }
@@ -1130,26 +407,15 @@ NoteExtras = class {
 
   prepOptionsMenu() {
     let current_index = -1;
-    if (note.fem == null) {
-      utils.disableMenuOption("highlightGender");
-    }
-    if (note.plural == null) {
-      utils.disableMenuOption("highlightPlural");
-    }
-    if (note.html_word == note.word) {
-      utils.disableMenuOption("highlightCustom");
-    }
-    if (marker.mark() == false) {
-      utils.disableMenuOption("highlightRoots");
-    }
+
     if (note.bank == null || note.bank_length == 1) {
       /* utils.disableMenuOption("oEX") ;  document.querySelector("#previousIcon").style.display = "none";document.querySelector("#nxtIcon").style.display = "none"; */
     } else {
       var indexOnScreen = 1;
       document.querySelector('#noOfEx').innerHTML = "<br> example " + indexOnScreen + " of " + note.bank_length;
-      let current_example = utils.textId('frenchExamble');
+      let current_example = utils.textId('example');
       for (var i = 0; i < note.bank_length; i++) {
-        if (current_example.toLowerCase() == note.bank[i].fr.toLowerCase()) {
+        if (current_example.toLowerCase() == note.bank[i].example.toLowerCase()) {
           current_index = i;
           break;
         }
@@ -1161,38 +427,6 @@ NoteExtras = class {
   }
 
 
-  prepHighlightingMenu() {
-    var _this = this;
-    window.selectedHighlightingId = window.selectedHighlightingId || config.defaultHighlightingSelection;
-    if (window.selectedHighlightingId) {
-      if (document.getElementById(window.selectedHighlightingId)) {
-        if (document.getElementById(window.selectedHighlightingId).disabled == false)
-          var radio = document.getElementById(window.selectedHighlightingId);
-        else {
-          window.selectedHighlightingId = config.defaultHighlightingSelection;
-          var radio = document.getElementById(window.selectedHighlightingId);
-          radio.checked = 'checked';
-          _this.highlightWord(window.selectedHighlightingId);
-        }
-      } else window.selectedHighlightingId = config.defaultHighlightingSelection;
-      var radio = document.getElementById(window.selectedHighlightingId);
-      radio.checked = 'checked';
-      _this.highlightWord(window.selectedHighlightingId);
-    }
-
-
-    var radios = document.getElementsByName('highilightingOptions');
-    for (var i = 0, max = radios.length; i < max; i++) {
-
-      radios[i].addEventListener('change', function () {
-        window.selectedHighlightingId = this.id;
-        _this.highlightWord(window.selectedHighlightingId);
-
-      }, false);
-    }
-
-
-  }
 
 
   prepAttatchmentsMenu() {
@@ -1329,7 +563,6 @@ noteExtras = new NoteExtras(note);
 noteExtras.prepMaturityStatus();
 current_index = noteExtras.prepOptionsMenu()[0];
 indexOnScreen = noteExtras.prepOptionsMenu()[1];
-noteExtras.prepHighlightingMenu();
 noteExtras.prepAttatchmentsMenu();
 noteExtras.prepExtraOptionsMenu();
 noteExtras.prepMainMenu();
@@ -1411,15 +644,7 @@ function anotherExample(next) {
     current_index = note.bank_length - 1;
   }
 
-  styleManipulator.markFrenchWordInTheExample(note.bank[current_index].fr, note.bank[current_index].en);
+  styleManipulator.markWordInTheExample(note.bank[current_index].example, note.bank[current_index].translation);
   document.querySelector('#exampleSound').innerHTML = addAPlayButton(note.bank[current_index].audio);
-
-
-
-  // "<span> <audio preload='none' style='margin-button:-20px;' controls ><source type='audio/mp3' src="+bank[current_index]['audio']+" /></span>"
-
-
-
-  // document.getElementById('exampleSound').childNodes[1].innerHTML = '[sound:'+ bank[current_index]['audio']+']'
 
 }

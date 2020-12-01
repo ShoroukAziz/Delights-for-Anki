@@ -1,5 +1,5 @@
 :root {
-  --background-img: linear-gradient(76deg, rgba(232, 151, 151, 0.7) 0%, rgba(140, 174, 212, 0.7) 100%), url(../assets/backgrounds/_tbg4.jpg);
+  --background-img: linear-gradient(76deg, rgba(232, 151, 151, 0.7) 0%, rgba(140, 174, 212, 0.7) 100%), url(../assets/backgrounds/_tbg.jpg);
   --menu-background-color :#f1f1f1;
   --menu-title-background-color:#ccc;
 }
@@ -823,6 +823,15 @@ color:#8a5473;
 color:#3d6287
 }
 
+.noun__background{
+  background: rgb(91, 45, 134);
+  background: linear-gradient(90deg, rgba(188, 88, 255, 0.726) 0%, rgba(203, 148, 235, 0.267) 45%, rgb(224, 187, 255) 100%);
+  }
+  
+  .noun__image{
+    background-color:  rgb(91, 45, 134);
+  }
+  
 
 .masculine__background{
 background: rgb(105,88,255);
