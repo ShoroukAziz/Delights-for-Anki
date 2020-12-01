@@ -1,0 +1,984 @@
+:root {
+  --background-img: linear-gradient(76deg, rgba(232, 151, 151, 0.7) 0%, rgba(140, 174, 212, 0.7) 100%), url(../assets/backgrounds/_tbg4.jpg);
+  --menu-background-color :#f1f1f1;
+  --menu-title-background-color:#ccc;
+}
+
+
+
+.hidden-fields{
+  display:none;
+}
+
+
+.separator {
+  border: 0;
+}
+hr{
+  margin-top: 15px;
+  margin-bottom:  15px;
+  background-color: #ffffff00;
+}
+
+#phrase iframe{
+  height: 430px !important
+}
+
+.separator--line {
+  border: 0;
+  border-bottom:1px solid #858585;
+
+  width: 0;
+  animation: separator-width 0.3s ease-out forwards;
+}
+@keyframes separator-width {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+p{
+  padding:0px;
+  margin:0px;
+}
+
+.sound-buttons-container{
+  width:60%;
+  margin:auto;
+}
+
+.card {
+  width:52%; 
+  background: var(--background-img);
+  background-size: 100%;
+  font-size: 40px;
+  text-align: center;
+  color: black;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 1200px) {
+  .card{
+  width: 70%;
+  margin-left: 25%;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .card{
+  width: 100%;
+  margin: 0 auto;
+  }
+}
+
+.conj-card{
+  width: 77% ;
+  background:  var(--background-img);
+  background-size: 100%;
+  font-size: 40px;
+  text-align: center;
+  color: black;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 1200px) {
+  .conj-card{
+  width: 100%;
+  margin: 0 auto;
+  }
+}
+
+.frontCard{
+border-radius:15px;
+padding:50px;
+display: block;
+position: relative;
+margin-top:6%;
+}
+
+@media only screen and (max-width: 1024px) {
+
+  .frontCard{
+    margin-top: 0.5%;
+    height: 80vh;
+  }
+
+  .front-card__translation{
+    font-size: 50px !important;
+  }
+}
+
+.attention{
+  color: #990513;
+   background-color: white;
+  border:1px solid white;
+  border-radius: 25px;
+  font-size: 20px;
+  margin: 45px 0px;
+  padding: 1px;
+  text-align: center;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.attention__icon{
+  width: 25px;
+  margin-bottom: -5px;
+  margin-right: 5px;
+}
+/* Back card's background */
+#container {
+
+  margin-top:2vh;
+  border-radius:15px;
+  position: relative;
+  z-index: 90;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+}
+
+
+@media only screen and (max-width: 1024px) {
+  #container{
+  min-height: 100vh;
+  margin-top:0px;
+  }
+}
+
+#imgcontainer{
+  min-height: 80px;
+}
+
+#imgcontainer img , video {
+
+  width: auto;
+  height: auto;
+  margin-top:15px;
+  padding-bottom:5px;
+  height: 200px;
+  max-width: 350px;
+
+}
+
+@media only screen and (max-width: 1024px) {
+  #imgcontainer{
+      padding-bottom:1px;
+  }
+
+  #imgcontainer img  {
+
+    max-height: 250px;
+    max-width: 200px;
+
+  }
+
+  #imgcontainer  video {
+      display: none;
+  }
+}
+
+/******************************************************/
+
+/*French word*/
+.word {
+  font-family: Impact;
+  color: black;
+  margin:0px;
+  font-size: 60px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .word{
+  font-size:45px;
+  }
+}
+
+.typedWord {
+  font-size: 60px;
+  margin: 1px;
+}
+@media only screen and (max-width: 1024px) {
+    .typedWord {
+      font-size: 25px;
+    }
+}
+
+/*English translation*/
+.translation{
+  font-size:15px;
+  color:#25272b;
+  padding-top:5px;
+  /* font-weight: bold; */
+}
+
+.translation__word{
+
+  background-color:#eeff7d70;
+   margin:0 4px 0 4px;
+    padding:3px 6px;
+    border:1px solid #e4e6da ;
+    border-radius:10px;
+}
+.translation__word--note{
+    background-color:#ff974770;
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+
+.translation{
+  font-size:15px;
+  color:#25272b;
+  padding-top:2px;
+}
+}
+
+.translation__icon{
+  width:15px;
+  border:0px ;
+  margin-right:4px
+}
+
+.translation--front{
+  font-size:25px;
+}
+
+/*french and english examples*/
+.examples{
+  font-size:30px;
+  font-family: myfont;
+  font-weight: bold;
+}
+
+.example__higlighted-word{
+  color:red;
+  background-color:#eeff7d70;
+  border-radius:10px;
+}
+
+@media only screen and (max-width: 1024px) {
+
+  .examples{
+    font-size:30px;
+  }
+}
+
+.examples__icon{
+   cursor: pointer;
+   margin-top:12px;
+
+  display:inline-block
+}
+.examples__icon--previous{
+    float:left;
+    margin-left:15px;
+}
+.examples__icon--next{
+    float:right;
+    margin-right:15px;
+}
+
+#noOfEx{
+  font-size: 10px;
+}
+
+
+@media only screen and (max-width: 1024px) {
+  .examples__icon--previous{
+    display: none !important;
+  }
+  .examples__icon--next{
+      display: none !important;
+  }
+
+  #noOfEx{
+    display: none !important;
+  }
+}
+
+.ipa{
+  font-size:20px;
+  font-weight:normal;
+  color:#424241;
+
+}
+
+.noun-plural{
+  display: none;
+}
+
+.plural-arrow-icon{
+  width:80px;
+  margin-bottom: -20px;
+}
+
+/****************************************************/
+.front-play-btn{
+  width: 140px;
+    height: 140px;
+    background: white;
+    border-radius: 50px;
+    padding: 4px;
+
+}
+
+/*Small replay  button on the back  card*/
+.button .replay-button svg  {
+
+  font-size:40px;
+  background-color:white;
+  border: 1px dotted #CCC;
+  border-radius: 90px;
+}
+
+
+
+/*Large replay  button on the front card*/
+
+.button1 .replay-button svg {
+  padding:5px;
+  height:100px;
+  width: 100px;
+  background-color:white;
+  border: 1px dotted #CCC;
+  border-radius: 90px;
+}
+
+.button--tiny .replay-button svg {
+  font-size:20px;
+  background-color:white;
+  border: 1px dotted #CCC;
+  border-radius: 90px;
+}
+
+@media only screen and (max-width: 1024px) {
+
+    .button1 .replay-button svg {
+      font-size:40px;
+    }
+}
+
+/****************************************************/
+
+/*Type answer boz style*/
+
+#typeans {
+  width: 70%;
+  height: 60px;
+  font-size: 40px !important;
+  text-align: center;
+  box-sizing: border-box;
+}
+#typeans:focus{
+  outline: 5px solid #2bd1e3;
+}
+
+@media only screen and (max-width: 1024px) {
+  .typeans{
+  width: 100%;
+  height: unset;
+  font-size: unset;
+  }
+}
+
+/*********************************************************/
+
+/*used in Conjugations button - used in javascript*/
+.collapsible {
+
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  outline: none;
+  margin:0px;
+  width: 100%;
+  display:block;
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  font-size: 15px;
+  font-weight:bold;
+}
+/****************************************************/
+
+
+.attachments{
+  display:block;
+}
+
+.card-attachment__title{
+  border: none;
+  text-align: center;
+  outline: none;
+  margin:0px;
+  width: 100%;
+  display:block;
+  text-decoration: none;
+  color: #fff;
+  padding: 5px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight:bold;
+  font-family:Comic Sans MS;
+}
+
+.card-attachment__title--extra{
+color:black ;
+background-color:#f3dcf5;
+}
+
+.card-attachment__title--mnemonic{
+background-color:#3ac990;
+}
+
+.card-attachment__title--tags{
+background-color:#424241;
+}
+
+.card-attachment__title__icon{
+  margin:-15px;
+}
+
+.card-attachment__title__icon--small{
+  margin:-5px;
+  width:20px;
+}
+
+.card-attachment__title__icon--med{
+  width:35px;
+}
+
+.card-attachment__body{
+  padding: 20px;
+  overflow: hidden;
+  font-family:myfont;
+  text-align:center;
+  font-family:arial;
+  font-size:15px;
+}
+
+.card-attachment__body--extra{
+  color:grey ;
+  background-color:#f3dcf5;
+}
+
+.card-attachment__body--mnemonic{
+  color:#354d43 ;
+  background-color:#3ac990;
+  font-size:20px;
+}
+
+.card-attachment__body--tags{
+  color:grey;
+  background-color:#424241;
+ font-family:myfont;
+
+}
+/****************************************************/
+
+
+/**********************************************/
+.verb-table-content{
+  padding: 30px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  font-size:200px;
+  font-family:myfont;
+  text-align:center;
+}
+
+/**********************************************************/
+.type-corner {
+  width: 0;
+  height: 0;
+  border-top: 150px solid rgba(173, 147, 147, 0.4);
+  /* border-bottom: 150px solid transparent; */
+  border-left: 150px solid transparent;
+  position:absolute;
+  right:0;
+  font-weight: bold;
+  display: none;
+}
+
+.type-corner__text {
+  position:absolute;
+  top: -110px;
+  width: 100px;
+  left: -100px;
+  text-align: center;
+  font-size: 22px;
+  font-family: myfont;
+  transform: rotate(45deg);
+  display:block;
+  color:#383333;
+}
+/***************************************************************/
+
+
+.ribbon {
+  width: 0px;
+  height: 35px;
+  background-color: transparent;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  top: -5px;
+  left: 20px;
+}
+
+.ribbon:hover {
+  height: 65px;
+}
+
+.ribbon--green {
+  border: solid 15px #99ff66;
+  border-bottom: solid 15px transparent;
+}
+.ribbon--pink {
+    border: solid 15px deeppink;
+    border-bottom: solid 15px transparent;
+
+}
+.ribbon--blue {
+    border: solid 15px #0099cc;
+    border-bottom: solid 15px transparent;
+}
+
+
+
+/*************************************************************/
+.links{
+  position: absolute;
+  width:10%;
+  top:10%;
+  right: 67%;
+}
+.link{
+
+  cursor:pointer;
+  border-radius: 4px 0px 0px 4px;
+  margin-bottom:6px;
+  font-size:20px;
+  font-family:myfont;
+  padding:5px 5px 5px 5px;
+}
+
+.link:hover{
+  position: relative;
+  right: 72%;
+}
+
+.link1{
+  background-color:#8a1108;
+}
+.link2{
+  background-color:#333333;
+}
+.link3{
+  background-color:#373147;
+}
+.link4{
+  background-color:#0c5703;
+}
+.link5{
+  background-color:#57034c;
+}
+.link a{
+  text-decoration: none;
+  color: white;
+
+}
+.link a:visited {
+  color: white;
+}
+/***************************************************************/
+.menus{
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  min-height: 100%;
+  min-width: 190px;
+  background-color:var(--menu-background-color);
+  font-size: 20px;
+
+}
+
+
+.conj-menus{
+  position: absolute;
+right: 0%;
+top: 0%;
+min-height: 100%;
+min-width: 160px;
+background-color:var(--menu-background-color);
+font-size: 20px;
+}
+
+.hidden{
+display: none;
+}
+
+.block{
+display: block;
+}
+
+
+
+.menu-head{
+  background-color: #7b717bfc;
+  color: #fff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom:10px;
+  font-family: myfont;
+  font-size: 20px;
+  text-align: center;
+
+}
+
+.menu__head__icon{
+  width: 20px;
+  margin-left: -15px;
+  margin-right: 10px;
+  margin-bottom: -5px;
+
+}
+.menu__head__icon--right{
+  width: 20px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.menu__head__icon--open{
+  width: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+
+}
+
+.menu__head__icon:hover{
+cursor: pointer;
+
+}
+
+.menu__head__icon--open{
+  cursor: pointer;
+}
+
+.menu__title{
+  font-family: myfont;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px;
+  margin: 15px 0;
+  background-color: var(--menu-title-background-color);
+}
+
+.menu{
+  font-size:15px;
+  text-align:left;
+
+}
+
+.menu--2{
+
+  display: flex;
+  text-align:center;
+}
+
+.menu2-icon{
+padding: 4.5px;
+ height: 30px;
+  margin:0 !important;
+  /* flex: 1; */
+  cursor: pointer;
+}
+
+
+
+
+/***************************************************************/
+.card-maturity{
+  /* position: absolute;
+  right: 35px;
+  bottom:400px; */
+  font-size:20px;
+  font-family:myfont;
+  font-weight: bold;
+  padding-top: 1%;
+  /* width:140px; */
+}
+
+.card-maturity__star-icon{
+  width: 40px;
+  height: 40px;
+}
+.card-maturity__text{
+  text-align: center;
+  font-family: myfont;
+  color: white;
+}
+
+/***************************************************************/
+/*for menus */
+.option-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  /* transition: all 0.15s ease-out 0s; */
+  background: #cbd1d8;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
+  z-index: 1000;
+  margin-right: 6px;
+  margin-bottom : -3px;
+}
+.option-input:hover {
+  background: #9faab7;
+}
+.option-input:checked {
+  background: #374957;
+}
+.option-input:checked::before {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  content: '✔';
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+  /* line-height: 20px; */
+}
+.option-input:checked::after {
+
+  background: #374957;
+  content: '';
+  display: block;
+  position: relative;
+  z-index: 100;
+}
+.option-input.radio {
+  border-radius: 50%;
+}
+.option-input.radio::after {
+  border-radius: 50%;
+}
+
+
+.options label {
+  display: block;
+}
+
+.highlightOption{
+  display: block;
+  /* width:135px; */
+  /* border: 2px solid rgb(212, 119, 143,0.3); */
+  padding: 5px;
+}
+
+
+/***************
+* Note-type specific stylling
+**/
+
+
+.adverb__background {background: rgb(201,162,255);
+background: linear-gradient(90deg, rgba(201,162,255,1) 12%, rgba(244,251,255,1) 100%);
+}
+
+.adverb__image{
+ background-color:rgb(184, 77, 255);
+padding-bottom:5px;
+}
+
+.adjective__background {
+background: rgb(253,255,186);
+background: linear-gradient(4deg, rgba(253,255,186,1) 0%, rgba(255,251,223,1) 70%, rgba(255,255,255,1) 100%);
+}
+
+.adjective__image {
+ background-color: #e89d35;
+}
+
+
+.feminin{
+color:#8a5473;
+}
+.masculine{
+color:#3d6287
+}
+
+
+.masculine__background{
+background: rgb(105,88,255);
+background: linear-gradient(90deg, rgba(105,88,255,0.7260037804184174) 0%, rgba(69,218,174,0.2666200269170168) 45%, rgba(187,231,255,1) 100%);
+}
+
+.masculine__image{
+  background-color: #507fad;
+}
+
+.feminine__background{
+  background:linear-gradient(90deg, rgba(255,209,209,1) 0%, rgba(255,234,197,1) 24%, rgba(255,225,241,1) 75%, rgba(252,222,222,1) 100%);
+
+}
+
+.feminine__image{
+  background-color: #ad5086;
+
+}
+
+.both__background {
+background: rgb(193,186,255);
+background: linear-gradient(90deg, rgba(193,186,255,1) 0%, rgba(255,223,242,1) 70%, rgba(255,255,255,1) 100%);
+}
+
+.both__image {
+background: rgb(105,88,255);
+background: linear-gradient(90deg, rgba(105,88,255,1) 0%, rgba(255,117,199,1) 70%, rgba(255,255,255,1) 100%);
+
+}
+
+.phrase__image{
+  background: rgb(63,94,251);
+background: linear-gradient(90deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+}
+
+
+.other__image{
+  background-color: grey;
+}
+
+
+
+.verb__background {
+background: rgb(206,255,186);
+background: linear-gradient(4deg, rgba(206,255,186,1) 0%, rgba(228,255,223,1) 70%, rgba(255,255,255,1) 100%);
+}
+
+
+.verb__image{
+ background-color: #4d8f55;
+padding-bottom:5px;
+}
+
+
+.one{
+background-image: linear-gradient(45deg, #8bc787 30%, #b2de59 30%, #b2de59 50%, #8bc787 50%, #8bc787 80%, #b2de59 80%, #b2de59 100%);
+background-size: 7.07px 7.07px;
+margin-bottom: 3px;
+
+}
+
+.two{
+background-image: linear-gradient(45deg, #98d1f0 30%, #abdcf5 30%, #abdcf5 50%, #98d1f0 50%, #98d1f0 80%, #abdcf5 80%, #abdcf5 100%);
+background-size: 7.07px 7.07px;
+margin-bottom: 3px;
+}
+
+.three{
+background-image: linear-gradient(45deg, #ff8585 30%, #ff7f7f 30%, #ff7f7f 50%, #ff8585 50%, #ff8585 80%, #ff7f7f 80%, #ff7f7f 100%);
+background-size: 7.07px 7.07px;
+margin-bottom: 3px;
+}
+
+
+.verb-first-group-ending{
+color:#005706;
+text-decoration: underline;
+font-weight:bold;
+}
+
+
+.verb-second-group-ending{
+color:#0c386b;
+text-decoration: underline;
+font-weight:bold;
+}
+
+
+.verb-third-group-ending{
+color:#a6082b;
+text-decoration: underline;
+font-weight:bold;
+}
+
+
+.verb-conj-mini-card{
+    display: inline-block;
+    padding: 5px;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    font-size: 35px;
+    font-family: myfont;
+    text-align: center;
+    width: 28%;
+    min-height: 120px;
+    border: 1px solid black;
+    margin-top: 6px;
+
+}
+
+.verb-conj-mini-card__label{
+width: 30%;
+padding: 5px;
+display: inline-block;
+font-size: 20px;
+font-family: myfont;
+font-weight: bold;
+  color:blue;
+}
+.verb-conj-mini-card--left{
+  display: inline-block;
+  padding: 5px 5px 5px 5px;
+  overflow: hidden;
+  font-size: 20px;
+  font-family: myfont;
+  text-align: center;
+  min-height: 120px;
+  width: 5%;
+  line-height:120px;
+  color:red;
+  font-weight: bold;
+}
+/***************************************************************/
+#conjugations{
+  display:none;
+}
+
+/**************************************************************************/
+
+/**************************************************************************************************/
+@media only screen and (max-width: 1500px) {
+
+#content{
+  margin:0.05em !important;
+}
+
+.template{
+  display: none;
+}
+
+}
+
+
+
+
+/**************************************************************************************************/
+
+@font-face { font-family: myfont; src: url('../assets/font/_KGNeatlyPrinted.ttf'); }
